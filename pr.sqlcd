@@ -1,0 +1,58 @@
+-- MySQL dump 10.13  Distrib 8.0.27, for Linux (x86_64)
+--
+-- Host: localhost    Database: traiteur
+-- ------------------------------------------------------
+-- Server version	8.0.27-0ubuntu0.20.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `product`
+--
+
+DROP TABLE IF EXISTS `product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `product` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `category_id` int DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `unit` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` double NOT NULL,
+  `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_D34A04AD12469DE2` (`category_id`),
+  CONSTRAINT `FK_D34A04AD12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product`
+--
+
+LOCK TABLES `product` WRITE;
+/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` VALUES (2,2,'مقلوبة','وجبة',7,'المقلوبة هي طبق رئيس من الأطباق العربية الشعبية من المطبخ الشامي والعراقي يتكوّن من أرز مع خضار مقلية متنوعة، من ضمنها الباذنجان أو القرنبيط أو البطاطا أو الفول الأخضر، وقد يستخدم مزيج من هذه الخضروات، ويوضع معها اللحم كلحم الضأن أو الدجاج. وتقدم المقلوبة عادةً مع اللبن أو الزبادي أو السلطة العربية المكونة من الطماطم والخيار والبقدونس والخس وعصير الليمون. تشتهر المقلوبة في سورية وفلسطين والأردن والعراق','4bac2aa7a06a191ef4425c2dd55b0488.png'),(3,2,'ورق عنب','وجبة',8,'أوراق عنب ملفوفة محشية بالأرز والبهارات واللحم. انتشر ورق العنب على نطاق واسع جداً بين بلدان الشرق الأوسط وأصبح أكلة مشهورة في شرق المتوسط','d7b36ae1f4405f0feec346c806d97665.png'),(4,2,'شاورما','وجبة',7,'الشاورما  نوع من أنواع مأكولات الشرق الأوسط التي تعود جذورها إلى بلاد الشام، والدولة العثمانية، وهي عبارة عن لحم مشوي بطريقة خاصة حيث يشوى اللحم بواسطة الحرارة والأشعاع الناتج من مصدر الحرارة والذي يمكن أن يكون مصدر كهربائي أو غازي أو من الفحم. وتباع الشاورما في مطاعم الوجبات السريعة.\r\n\r\nلحم الشاورما يكون عادة من اللحم البقري أو لحم الجمل أو لحم الضأن أو لحم الدجاج حيث يوضع اللحم مرصوصاً على سيخ معدني ويكون اللحم المعد للشي بأقطار مختلفة وقد يصل قطرها إلى نصف متر. يوقف عمود اللحم بصورة عمودية بجانب النار التي تكون من جهة واحدة ويدور عمود اللحم لينال نصيبه من حرارة موقد النار والحرارة الذي يكون كذلك على اللحم. الشاورما هي واحدة من أشهر أنواع طعام الشارع في العالم، وخاصة في مصر وبلاد الشام وشبه الجزيرة العربية.','fd2b0cc8ac8566326c4f573e1bd003bc.jpeg'),(5,2,'فلافل','وجبة',7,'الفلافل نوعان إمّا مصنوعة من الفول المطحون كما هو متّبع في مصر، أو من الحمص المطحون كما تجري عليه العادة في بلاد الشام والسودان، أو بكليهما الفول والحمص مخلوطين معًا. وتُقلى الفلافل بشكل يدوي أو بشكل نصف يدوي باستعمال قوالب نحاسية أو باستخدام آلات حديثة كما في سوريا والأردن وفلسطين ومصر بشكل غير شائع.','9fa31ea12ce5e43351686dedb03f866f.png'),(6,2,'لحمة بالصينية','كغ',30,'طبق اللحم بالصينية من الأطباق الشهيرة لدى العرب في بلاد الشام خاصة سوريا. حيث يُطهى اللحم مع البصل المفروم وشرائح البندورة والقليل من البقدونس','4a6d1d8958beda700ecfaa8fae0aa7e3.png'),(8,3,'حلاوة الجبن','صحن',5,NULL,'1c0620a4e25fb139c6a5d5663bb13ce7.jpeg'),(9,2,'صفيحة','كغ',30,'أقراص عجين مع لحمة مفرومة ومخلوطة بالبصل والبندورة ودبس الرمان','374b5832577b941519b71a3c9d331e6a.jpeg'),(10,2,'صينية بطاطا بالدجاج','صينية',15,'دجاج مشوي بالفرن مع البطاطا والثوم والليمون','406b192d54784a64370dec3629730b39.png'),(11,2,'فروج مشوي','فروج',12,'فروج متبل ومشوي بالفرن','d785caebb662e66bfc7cd88fcf8110bd.jpeg'),(12,3,'كنافة','صحن',5,NULL,'ee22f05fc5e9c1407787b014d46ce97c.jpeg'),(13,1,'فطاير لحمة','عدد',0.5,NULL,'9ba6f6dde92287089ccacb320646edd6.jpeg'),(14,1,'فطاير سبانخ','عدد',0.5,NULL,'3de8b6ddcc07c0d421d7c73c8b39cc80.jpeg'),(15,2,'بورغر','وجبة',7,NULL,'c07b490f655f81736ca9c8c92a167b6d.jpeg'),(16,1,'متبل','صحن',2,NULL,'15cf28caee3f9c3a3f85254110105685.jpeg'),(17,3,'نهش','صحن',5,NULL,'dc2afa43050806a75d4bf141c24cfd10.png'),(18,2,'مندي','وجبة',7,'المندي طبق عربي تقليدي اشتهر به أهل جنوب الجزيرة العربية مثل منطقتي عسير وجيزان السعوديتين واليمن مثل حضرموت و شبوة شرق اليمن وَقد انتشر في أنحاء شبه الجزيرة العربية وأقطار عربية مختلفة مثل الأردن ومصر وسورية وفلسطين ودول الخليج عامة. الفكرة من المندي أو الزرب هي أن ينضج اللحم بالحرارة وأن يندى الدهن على اللحم وما تلاه من الأسفل من رز.  ويتبل اللحم بالإضافات قبل وقت مناسب من بدء الطهي.','e0c732caf2cffea9935dcba30c0e5300.png');
+/*!40000 ALTER TABLE `product` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2022-01-31 19:01:24

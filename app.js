@@ -9,7 +9,6 @@ const https = require('https')
 const fs = require('fs')
 const path = require("path")
 const app = express()
-console.log(https);
 
 app.use(cors())
 
@@ -33,5 +32,5 @@ const sslServer = https.createServer(
     }
     , app)
 
-
-sslServer.listen(port, () => console.log(`Listening on port ${port}`))
+app.listen(port)
+// sslServer.listen(port, () => console.log(`Listening on port ${port}`))

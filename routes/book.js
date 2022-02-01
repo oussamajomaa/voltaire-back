@@ -35,6 +35,13 @@ router.post('/add-book', verifyToken, (req, res) => {
     })
 })
 
+router.post('/add-classification', (req,res) => {
+    const item = req.body
+    mysql.query('insert into classification set ?', item, (err,rows) => {
+        if (!err) res.send({ message: `success` })
+    })
+})
+
 // Une route qui sert à ajouter l'id du livre avec l'id du contributeur dans une table intermidiare book_contributeur
 router.post('/add-book-contibutor', (req, res) => {
     const item = req.body
@@ -52,12 +59,12 @@ router.patch('/edit-book', verifyToken, (req, res) => {
         else {
             const id = req.body.id
             mysql.query(`DELETE from book_contributor where book_id = ${id}`, (err, rows) => { })
+            mysql.query(`DELETE from classification where book_id = ${id}`, (err, rows) => { })
             const book = [
                 req.body.title,
                 req.body.publisher,
                 req.body.publication_place,
                 req.body.publication_date,
-                req.body.publisher_stated,
                 req.body.publication_place_stated,
                 req.body.publication_date_stated,
                 req.body.type_document,
@@ -76,13 +83,13 @@ router.patch('/edit-book', verifyToken, (req, res) => {
                 req.body.notes,
                 req.body.user_update,
                 req.body.update_date,
+                req.body.pot_pourri,
                 req.body.id
             ]
             mysql.query(`UPDATE book set    title = ?,
                                             publisher = ?,
                                             publication_place = ?,
                                             publication_date = ?,
-                                            publisher_stated = ?,
                                             publication_place_stated = ?,
                                             publication_date_stated = ?,
                                             type_document = ?,
@@ -100,7 +107,8 @@ router.patch('/edit-book', verifyToken, (req, res) => {
                                             external_resource = ?,
                                             notes = ?,
                                             user_update = ?,
-                                            update_date = ?
+                                            update_date = ?,
+                                            pot_pourri = ?
                                             where id = ?`, book, (err, rows) => {
                 if (!err) res.send({ message: "One item has been updated" })
                 else console.log(err)
@@ -116,6 +124,7 @@ router.delete('/deleteBook', verifyToken, (req, res, next) => {
         else {
             const id = req.query["id"]
             mysql.query(`DELETE from book_contributor where book_id = ${id}`, (err, rows) => { })
+            mysql.query(`DELETE from classification where book_id = ${id}`, (err, rows) => { })
             mysql.query(`DELETE from book where id = ${id}`, (err, rows) => {
                 if (!err) res.send({ message: "one book has been deleted" })
                 else res.send(err)
@@ -157,12 +166,32 @@ router.get('/show-book', verifyToken, (req, res) => {
 // })
 
 
+// Une route qui sert à récupérer un ou plusieurs contributors
+router.get('/search-book',verifyToken, (req, res) => {
+    // router.get('/show-contributor', (req, res) => {
+    jwt.verify(req.token, 'voltaire', (err, decode) => {
+        if (err) res.send({ status: '403', err })
+        else {
+            const title = req.query["title"]
+            mysql.query(`select *from book where title like '${title}%'`, (err, rows) => {
+                if (!err) {
+                    res.send(rows)
+                }
+                else {
+                    console.log(err)
+                }
+            })
+        }
+    })
+})
+
 // Une route qui sert à récupérer un livre
 router.get('/get-one-book', verifyToken, (req, res) => {
     jwt.verify(req.token, 'voltaire', (err, decode) => {
         if (err) res.send({ status: '403', err })
         else {
             const id = req.query["id"]
+            
             // mysql.query(`SELECT * from book where id = ${id}`, (err, row) => {
             mysql.query(`SELECT b.*,u.email from book b left join user u on b.user_id = u.id where b.id = ${id}`, (err, row) => {
                 if (!err) {
@@ -173,6 +202,13 @@ router.get('/get-one-book', verifyToken, (req, res) => {
                 }
             })
         }
+    })
+})
+
+router.get('/get-classification', (req,res) => {
+    const id = req.query["id"]
+    mysql.query(`select * from classification where book_id = ${id}` , (err,rows) => {
+        if (!err) res.send(rows)
     })
 })
 

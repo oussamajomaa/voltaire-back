@@ -24,7 +24,7 @@ router.post('/add-contributor',verifyToken, (req, res) => {
             const contributor = req.body
             mysql.query('INSERT INTO contributor SET ?', contributor, (err, rows) => {
                 if (!err) {
-                    res.send({ message: `The contributor ${contributor.name} has been added.` })
+                    res.send({ message: `The contributor ${contributor.first_name} has been added.` })
                 } else {
                     console.log(err)
                 }
@@ -41,13 +41,16 @@ router.patch('/edit-contributor',verifyToken, (req, res) => {
         else {
             // const book = req.body
             const contributor = [
-                            req.body.name,
-                            req.body.status,
+                            req.body.first_name,
+                            req.body.last_name,
+                            req.body.type,
+                            req.body.link_viaf,
                             req.body.id
                         ]
-                        console.log(contributor);
-            mysql.query(`UPDATE contributor set name = ?,
-                                                status = ?
+            mysql.query(`UPDATE contributor set first_name = ?,
+                                                last_name = ?,
+                                                type = ?,
+                                                link_viaf = ?
                                                 where id = ?`, contributor, (err, rows) => {
                 if (!err) res.send({ message: "One contributor has been updated" })
                 else console.log(err)
@@ -78,12 +81,32 @@ router.get('/show-contributor',verifyToken, (req, res) => {
     jwt.verify(req.token, 'voltaire', (err, decode) => {
         if (err) res.send({ status: '403', err })
         else {
-            mysql.query('SELECT * from contributor order by name', (err, rows) => {
+            mysql.query('SELECT * from contributor order by first_name', (err, rows) => {
                 if (!err) {
                     res.send(rows)
                 }
                 else {
-                    console.log('hi');
+                    console.log(err)
+                }
+            })
+        }
+    })
+})
+
+// Une route qui sert à récupérer un ou plusieurs contributors
+router.get('/search-contributor',verifyToken, (req, res) => {
+    // router.get('/show-contributor', (req, res) => {
+    jwt.verify(req.token, 'voltaire', (err, decode) => {
+        if (err) res.send({ status: '403', err })
+        else {
+            const first_name = req.query["first_name"]
+            mysql.query(`SELECT * from contributor where 
+                                                    first_name like '${first_name}%' or 
+                                                    last_name like '${first_name}%' `, (err, rows) => {
+                if (!err) {
+                    res.send(rows)
+                }
+                else {
                     console.log(err)
                 }
             })
