@@ -63,6 +63,7 @@ router.patch('/edit-book', verifyToken, (req, res) => {
             const book = [
                 req.body.title,
                 req.body.publisher,
+		req.body.publisher_stated,
                 req.body.publication_place,
                 req.body.publication_date,
                 req.body.publication_place_stated,
@@ -70,10 +71,8 @@ router.patch('/edit-book', verifyToken, (req, res) => {
                 req.body.type_document,
                 req.body.multivolume,
                 req.body.volume,
-                req.body.format,
                 req.body.source,
                 req.body.marginalia,
-                req.body.binding,
                 req.body.library,
                 req.body.cote,
                 req.body.provenance,
@@ -88,6 +87,7 @@ router.patch('/edit-book', verifyToken, (req, res) => {
             ]
             mysql.query(`UPDATE book set    title = ?,
                                             publisher = ?,
+					    publisher_stated = ?,
                                             publication_place = ?,
                                             publication_date = ?,
                                             publication_place_stated = ?,
@@ -95,10 +95,8 @@ router.patch('/edit-book', verifyToken, (req, res) => {
                                             type_document = ?,
                                             multivolume = ?,
                                             volume = ?,
-                                            format = ?,
                                             source = ?,
                                             marginalia = ?,
-                                            binding = ?,
                                             library = ?,
                                             cote = ?,
                                             provenance = ?,
@@ -173,7 +171,7 @@ router.get('/search-book',verifyToken, (req, res) => {
         if (err) res.send({ status: '403', err })
         else {
             const title = req.query["title"]
-            mysql.query(`select *from book where title like '${title}%'`, (err, rows) => {
+            mysql.query(`select *from book where title like "%${title}%"`, (err, rows) => {
                 if (!err) {
                     res.send(rows)
                 }
@@ -204,6 +202,52 @@ router.get('/get-one-book', verifyToken, (req, res) => {
         }
     })
 })
+
+// new modification 22/08/2022
+router.get('/get-allClassification', (req,res) => {
+    const id = req.query["id"]
+    mysql.query(`select * from classification` , (err,rows) => {
+        if (!err) res.send(rows)
+    })
+})
+
+// Une route qui sert à récupérer les livres par source
+router.get('/search-source',verifyToken, (req, res) => {
+    jwt.verify(req.token, 'voltaire', (err, decode) => {
+        if (err) res.send({ status: '403', err })
+        else {
+            const source = req.query["source"]
+            mysql.query(`select *from book where source like "%${source}%"`, (err, rows) => {
+                if (!err) {
+                    res.send(rows)
+                }
+                else {
+                    console.log(err)
+                }
+            })
+        }
+    })
+})
+
+// Une route qui sert à récupérer les livres par notes
+router.get('/search-notes',verifyToken, (req, res) => {
+    jwt.verify(req.token, 'voltaire', (err, decode) => {
+        if (err) res.send({ status: '403', err })
+        else {
+            const notes = req.query["notes"]
+            mysql.query(`select *from book where notes like "%${notes}%"`, (err, rows) => {
+                if (!err) {
+                    res.send(rows)
+                }
+                else {
+                    console.log(err)
+                }
+            })
+        }
+    })
+})
+
+// fin modifications
 
 router.get('/get-classification', (req,res) => {
     const id = req.query["id"]

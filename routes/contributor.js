@@ -43,14 +43,14 @@ router.patch('/edit-contributor',verifyToken, (req, res) => {
             const contributor = [
                             req.body.first_name,
                             req.body.last_name,
-                            req.body.type,
                             req.body.link_viaf,
+                            req.body.notes,
                             req.body.id
                         ]
             mysql.query(`UPDATE contributor set first_name = ?,
                                                 last_name = ?,
-                                                type = ?,
-                                                link_viaf = ?
+                                                link_viaf = ?,
+                                                notes = ?
                                                 where id = ?`, contributor, (err, rows) => {
                 if (!err) res.send({ message: "One contributor has been updated" })
                 else console.log(err)
@@ -101,8 +101,8 @@ router.get('/search-contributor',verifyToken, (req, res) => {
         else {
             const first_name = req.query["first_name"]
             mysql.query(`SELECT * from contributor where 
-                                                    first_name like '${first_name}%' or 
-                                                    last_name like '${first_name}%' `, (err, rows) => {
+                                                    first_name like '%${first_name}%' or 
+                                                    last_name like '%${first_name}%' `, (err, rows) => {
                 if (!err) {
                     res.send(rows)
                 }
